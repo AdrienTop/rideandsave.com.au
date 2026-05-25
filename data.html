@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', { 'analytics_storage': 'granted', 'ad_storage': 'denied' });
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX', { 'client_storage': 'none', 'anonymize_ip': true });
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="favicon.ico">
+<title>Australian Vehicle Fuel Consumption Data — Official vs Real-world | Ride &amp; Save</title>
+<meta name="robots" content="noindex">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #1a9e5c; --green-light: #22c76e; --green-pale: #e8faf1;
+    --black: #0d1117; --grey-mid: #3a4353; --grey-light: #8896ab;
+    --off-white: #f7f9f7; --white: #ffffff; --red: #e05252; --amber: #e8a12a;
+    --shadow: 0 4px 24px rgba(0,0,0,0.09); --radius: 16px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--off-white); color: var(--black); min-height: 100vh; }
+
+  header { background: var(--black); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 64px; position: sticky; top: 0; z-index: 100; }
+  .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; color: var(--white); letter-spacing: -0.5px; }
+  .logo span { color: var(--green-light); }
+  .back-link { font-size:.8rem; color:var(--green-light); text-decoration:none; font-weight:600; border:1.5px solid var(--green-light); border-radius:20px; padding:4px 12px; transition:all .15s; }
+  .back-link:hover { background:rgba(34,199,110,.15); }
+
+  .hero { background: var(--black); padding: 3rem 2rem 3.5rem; text-align: center; position: relative; overflow: hidden; }
+  .hero::before { content:''; position:absolute; top:-80px; left:50%; transform:translateX(-50%); width:600px; height:600px; background:radial-gradient(circle,rgba(26,158,92,.14) 0%,transparent 70%); pointer-events:none; }
+  .hero-eyebrow { font-family:'Syne',sans-serif; font-size:.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--green-light); margin-bottom:.8rem; }
+  .hero h1 { font-family:'Syne',sans-serif; font-size:clamp(1.8rem,4vw,2.8rem); font-weight:700; color:var(--white); line-height:1.15; letter-spacing:0; margin-bottom:.9rem; }
+  .hero h1 em { font-style:normal; color:var(--green-light); }
+  .hero p { font-size:1rem; color:var(--grey-light); max-width:580px; margin:0 auto; line-height:1.65; font-weight:300; }
+
+  .main { max-width:980px; margin:0 auto; padding:2.5rem 1.5rem 4rem; }
+
+  .method-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.2rem; margin-bottom:2.5rem; }
+  .method-box { background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow); padding:1.6rem; border:1px solid rgba(0,0,0,.05); }
+  .method-box h3 { font-family:'Syne',sans-serif; font-size:.95rem; font-weight:700; color:var(--black); margin-bottom:.7rem; }
+  .method-box p { font-size:.88rem; color:#4a5568; line-height:1.65; }
+  .method-box strong { color:var(--black); }
+  .method-box a { color:var(--black); text-decoration:underline; }
+
+  .cat-section { margin-bottom:2.5rem; }
+  .cat-header { display:flex; align-items:center; gap:.8rem; margin-bottom:1rem; flex-wrap:wrap; }
+  .cat-icon { font-size:1.6rem; }
+  .cat-title { font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:700; color:var(--black); }
+  .cat-avg { font-size:.82rem; color:#555555; margin-left:auto; background:var(--off-white); border:1px solid #e2e8f0; border-radius:20px; padding:.25rem .8rem; font-weight:500; }
+
+  .data-table { width:100%; border-collapse:collapse; background:var(--white); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); border:1px solid rgba(0,0,0,.05); }
+  .data-table thead th { background:var(--black); color:var(--white); font-family:'Syne',sans-serif; font-size:.72rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:.75rem 1rem; text-align:left; }
+  .data-table thead th.num { text-align:center; }
+  .data-table tbody tr { border-bottom:1px solid #f0f4f8; transition:background .12s; }
+  .data-table tbody tr:last-child { border-bottom:none; }
+  .data-table tbody tr:hover { background:#f8fffe; }
+  .data-table td { padding:.7rem 1rem; font-size:.88rem; color:var(--grey-mid); vertical-align:middle; }
+  .td-model { font-weight:550; color:var(--black); }
+  .td-year { font-size:.75rem; color:var(--grey-light); display:block; margin-top:1px; }
+  .td-num { text-align:center; font-weight:600; }
+  .td-official { color:var(--grey-mid); }
+  .td-real { color:var(--green); }
+  .td-diff { font-size:.78rem; font-weight:600; text-align:center; }
+  .td-diff-petrol { color:#b84c00; }
+  .td-diff-diesel { color:#8a6200; }
+
+  .fuel-header-row td { background:#f8fffe; border-bottom:1px solid #e2e8f0; padding:.45rem 1rem; }
+  .fuel-section-label { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; display:flex; align-items:center; gap:.5rem; }
+  .fsl-petrol { color:#1d4ed8; }
+  .fsl-diesel { color:#b07d10; }
+  .fsl-electric { color:#0d7a44; }
+  .fsl-hybrid { color:#6d28d9; }
+
+  .fuel-badge { display:inline-block; font-size:.65rem; font-weight:700; text-transform:uppercase; letter-spacing:.5px; padding:2px 7px; border-radius:20px; }
+  .badge-petrol { background:rgba(29,78,216,.1); color:#1d4ed8; }
+  .badge-diesel { background:rgba(232,161,42,.12); color:#b07d10; }
+  .badge-electric { background:rgba(26,158,92,.1); color:#0d7a44; }
+  .badge-hybrid { background:rgba(109,40,217,.08); color:#6d28d9; }
+
+  footer { text-align:center; padding:2rem 1.5rem; font-size:.75rem; color:var(--grey-light); border-top:1px solid #e8ecf0; line-height:1.8; }
+  footer a { color:var(--green); text-decoration:none; }
+
+  @media (max-width:640px) {
+    .method-grid { grid-template-columns:1fr; }
+    .cat-section { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+    .data-table td, .data-table th { padding:.45rem .5rem; font-size:.73rem; }
+    .data-table thead th { font-size:.6rem; letter-spacing:.5px; }
+    .cat-avg { margin-left:0; }
+    .fuel-section-label { font-size:.6rem; letter-spacing:.5px; }
+    .data-table th:nth-child(2), .data-table td:nth-child(2) { display:none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="/" style="text-decoration:none"><div class="logo">Ride<span>&</span>Save</div></a>
+  <a href="/" class="back-link">← Back to calculator</a>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">Fuel consumption data</div>
+  <h1>Official figures for<br><em>Australia's most popular vehicles</em></h1>
+  <p>Official fuel consumption from standardised WLTP lab tests, with real-world estimates based on mandatory on-board monitoring of 600,000 vehicles — published by the European Commission. Vehicle rankings by registered fleet size (BITRE 2024).</p>
+</div>
+
+<div class="main">
+
+  <div class="method-grid">
+    <div class="method-box">
+      <h3>Where this data comes from</h3>
+      <p>
+        Vehicle rankings and registration counts come from the <a href="https://www.bitre.gov.au/publications/ongoing/road_vehicles_australia" target="_blank"><strong>BITRE Road Vehicles Australia 2024</strong></a> dataset — Australia's most comprehensive registered fleet snapshot (21.7 million vehicles). Fuel consumption figures are standardised <strong>WLTP lab test</strong> results, as published by the <a href="https://www.greenvehicleguide.gov.au" target="_blank"><strong>Green Vehicle Guide</strong></a>.
+      </p>
+    </div>
+    <div class="method-box">
+      <h3>How we estimate real-world consumption</h3>
+      <p>
+        Official figures come from standardised lab conditions — no hills, no AC, no traffic. The <strong>European Commission</strong> published real-world data from mandatory on-board fuel consumption monitors (OBFCM) fitted to 600,000 vehicles. The gap between lab and road is <strong>+23.7% for petrol</strong>, <strong>+18.1% for diesel</strong>, and <strong>+14% for hybrids</strong>. &nbsp;
+        <a href="https://climate.ec.europa.eu/news-other-reads/news/first-commission-report-real-world-co2-emissions-cars-and-vans-using-data-board-fuel-consumption-2024-03-18_en" target="_blank">→ EU Commission OBFCM Report (March 2024)</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- SMALL CARS -->
+  <div class="cat-section">
+    <div class="cat-header">
+      <span class="cat-title">Small Cars</span>
+      <span class="cat-avg">Petrol avg: 6.2 L/100km official &nbsp;·&nbsp; 7.7 L/100km est. real-world</span>
+    </div>
+    <table class="data-table">
+      <thead><tr><th>Model</th><th>Fuel</th><th class="num">Official</th><th class="num">Real-world</th><th class="num">Gap</th></tr></thead>
+      <tbody>
+        <tr class="fuel-header-row"><td colspan="5"><span class="fuel-section-label fsl-petrol">Petrol — top 5 by AU registrations</span></td></tr>
+        <tr><td class="td-model">Toyota Corolla<span class="td-year">695,154 registered</span></td><td><span class="fuel-badge badge-petrol">Petrol</span></td><td class="td-num td-official">6.0</td><td class="td-num td-real">7.4</td><td class="td-diff td-diff-petrol">+24%</td></tr>
+        <tr><td class="td-model">Mazda 3<span class="td-year">520,532 registered</span></td><td><span class="fuel-badge badge-petrol">Petrol</span></td><td class="td-num td-official">6.0</td><td class="td-num td-real">7.4</td><td class="td-diff td-diff-petrol">+24%</td></tr>
+        <tr><td class="td-model">Hyundai i30<span class="td-year">356,937 registered</span></td><td><span class="fuel-badge badge-petrol">Petrol</span></td><td class="td-num td-official">6.8</td><td class="td-num td-real">8.4</td><td class="td-diff td-diff-petrol">+24%</td></tr>
+        <tr><td class="td-model">Toyota Yaris<span class="td-year">219,596 registered</span></td><td><span class="fuel-badge badge-petrol">Petrol</span></td><td class="td-num td-official">6.4</td><td class="td-num td-real">7.9</td><td class="td-diff td-diff-petrol">+24%</td></tr>
+        <tr><td class="td-model">Volkswagen Golf<span class="td-year">198,572 registered</span></td><td><span class="fuel-badge badge-petrol">Petrol</span></td><td class="td-num td-official">5.8</td><td class="td-num td-real">7.2</td><td class="td-diff td-diff-petrol">+24%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- MEDIUM CARS -->
+  <div class="cat-section">
+    <div class="cat-header">
+      <span class="cat-title">Medium Cars</span>
+      <span class="cat-avg">Petrol avg: 7.7 L/100km official &nbsp;·&nbsp; 9.5 L/100km est. real-world</span>
+    </div>
+    <table class="data-table">
+      <thead><tr><th>Model</th><th>Fuel</th><th class="num">Official</th><th class="num">Real-world</th><th class="num">Gap</th></tr></thead>
+      <tbody>
+        <tr class="fuel-header-row"><td colspan="5"><span class="fuel-section-label fsl-petrol">Petrol — top 5 by AU registrations</span></td></tr>
+        <tr><td class="td-model">Toyota Camry<span class="td-year">357,962 registered</span></td><td><span class="fuel-badge badge-petrol">Petrol</span></td><td class="td-num td-official">7.8</td><td class="td-num td-real">9.6</td><td class="td-diff td-diff-petrol">+24%</td></tr>
+        <tr><td class="td-model">Subaru Outback<span class="td-year">128,909 registered</span></td><td><span class="fuel-badge badge-petrol">Petrol</span></td><td class="td-num td-official">7.3</td><td class="td-num td-real">9.0</td><td class="td-diff td-diff-petrol">+24%</td></tr>
+        <tr><td class="td-model">Mazda 6<span class="td-year">101,459 registered</span></td><td><span class="fuel-badge badge-petrol">Petrol</span></td><td class="td-num td-official">7.0</td><td class="td-num td-real">8.7</td><td class="td-diff td-diff-petrol">+24%</td></tr>
+        <tr><td class="td-model">Honda Accord<span class="td-year">103,459 registered</span></td><td><span class="fuel-badge badge-petrol">Petrol</span></td><td class="td-num td-official">8.6</td><td class="td-num td-real">10.6</td><td class="td-diff td-diff-petrol">+24%</td></tr>
+        <tr><td class="td-model">Volkswagen Passat<span class="td-year">21,485 registered</span></td><td><span class="fuel-badge badge-petrol">Petrol</span></td><td class="td-num td-official">7.9</td><td class="td-num td-real">9.8</td><td class="td-diff td-diff-petrol">+24%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SMALL SUVS -->
+  <div class="cat-section">
+    <div class="cat-header">
+      <span class="cat-title">Small SUVs</span>
+      <span class="cat-avg">Petrol avg: 6.9 L/100km official &nbsp;·&nbsp; 8.5 L/100km est. real-world</span>
+    </div>
+    <table class="data-table">
+      <thead><tr><th>Model</th><th>Fuel</th><th class="num">Official</th><th class="num">Real-world</th><th class="num">Gap</th></tr></thead>
+      <tbody>
+        <tr class="fuel-header-row"><td colspan="5"><span class="fuel-section-label fsl-petrol">Petrol — top 5 by AU registrations</span></td></tr>
+        <tr><td class="td-model">Mitsubishi ASX<span class="td-year">161,875 registered</span></td><td><span class="fuel-badge badge-petrol">Petrol</span></td><td class="td-num td-official">7.6</td><td class="td-num td-real">9.4</td><td class="td-diff td-diff-petrol">+24%</td></tr>
+        <tr><td class="td-model">Mazda CX-3<span class="td-year">129,957 registered</span></td><td><span class="fuel-badge badge-petrol">Petrol</span></td><td class="td-num td-official">6.3</td><td class="td-num td-real">7.8</td><td class="td-diff td-diff-petrol">+24%</td></tr>
+        <tr><td class="td-model">Honda HR-V<span class="td-year">78,178 registered</span></td><td><span class="fuel-badge badge-petrol">Petrol</span></td><td class="td-num td-official">6.7</td><td class="td-num td-real">8.3</td><td class="td-diff td-diff-petrol">+24%</td></tr>
+        <tr><td class="td-model">Hyundai Kona<span class="td-year">71,750 registered</span></td><td><span class="fuel-badge badge-petrol">Petrol</span></td><td class="td-num td-official">6.7</td><td class="td-num td-real">8.3</td><td class="td-diff td-diff-petrol">+24%</td></tr>
+        <tr><td class="td-model">MG ZS<span class="td-year">60,902 registered</span></td><td><span class="fuel-badge badge-petrol">Petrol</span></td><td class="td-num td-official">7.1</td><td class="td-num td-real">8.8</td><td class="td-diff td-diff-petrol">+24%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- LARGE SUVS -->
+  <div class="cat-section">
+    <div class="cat-header">
+      <span class="cat-title">Large SUVs</span>
+      <span class="cat-avg">Petrol avg: 7.4 L/100km official &nbsp;·&nbsp; Diesel avg: 6.3 L/100km official</span>
+    </div>
+    <table class="data-table">
+      <thead><tr><th>Model</th><th>Fuel</th><th class="num">Official</th><th class="num">Real-world</th><th class="num">Gap</th></tr></thead>
+      <tbody>
+        <tr class="fuel-header-row"><td colspan="5"><span class="fuel-section-label fsl-petrol">Petrol — top 5 by AU registrations</span></td></tr>
+        <tr><td class="td-model">Toyota RAV4<span class="td-year">283,943 registered</span></td><td><span class="fuel-badge badge-petrol">Petrol</span></td><td class="td-num td-official">6.7</td><td class="td-num td-real">8.3</td><td class="td-diff td-diff-petrol">+24%</td></tr>
+        <tr><td class="td-model">Subaru Forester<span class="td-year">241,936 registered</span></td><td><span class="fuel-badge badge-petrol">Petrol</span></td><td class="td-num td-official">7.4</td><td class="td-num td-real">9.2</td><td class="td-diff td-diff-petrol">+24%</td></tr>
+        <tr><td class="td-model">Mazda CX-5<span class="td-year">240,279 registered</span></td><td><span class="fuel-badge badge-petrol">Petrol</span></td><td class="td-num td-official">7.4</td><td class="td-num td-real">9.2</td><td class="td-diff td-diff-petrol">+24%</td></tr>
+        <tr><td class="td-model">Nissan X-Trail<span class="td-year">232,647 registered</span></td><td><span class="fuel-badge badge-petrol">Petrol</span></td><td class="td-num td-official">8.1</td><td class="td-num td-real">10.0</td><td class="td-diff td-diff-petrol">+24%</td></tr>
+        <tr><td class="td-model">Mitsubishi Outlander<span class="td-year">188,795 registered</span></td><td><span class="fuel-badge badge-petrol">Petrol</span></td><td class="td-num td-official">7.2</td><td class="td-num td-real">8.9</td><td class="td-diff td-diff-petrol">+24%</td></tr>
+        <tr class="fuel-header-row"><td colspan="5"><span class="fuel-section-label fsl-diesel">Diesel — significant fleet presence (BITRE 2024)</span></td></tr>
+        <tr><td class="td-model">Mazda CX-5<span class="td-year">35,880 registered</span></td><td><span class="fuel-badge badge-diesel">Diesel</span></td><td class="td-num td-official">5.7</td><td class="td-num td-real">6.7</td><td class="td-diff td-diff-diesel">+18%</td></tr>
+        <tr><td class="td-model">Nissan X-Trail<span class="td-year">14,061 registered</span></td><td><span class="fuel-badge badge-diesel">Diesel</span></td><td class="td-num td-official">7.2</td><td class="td-num td-real">8.5</td><td class="td-diff td-diff-diesel">+18%</td></tr>
+        <tr><td class="td-model">Toyota RAV4<span class="td-year">13,588 registered</span></td><td><span class="fuel-badge badge-diesel">Diesel</span></td><td class="td-num td-official">6.5</td><td class="td-num td-real">7.7</td><td class="td-diff td-diff-diesel">+18%</td></tr>
+        <tr><td class="td-model">Subaru Forester<span class="td-year">10,712 registered</span></td><td><span class="fuel-badge badge-diesel">Diesel</span></td><td class="td-num td-official">5.9</td><td class="td-num td-real">7.1</td><td class="td-diff td-diff-diesel">+18%</td></tr>
+        <tr><td class="td-model">Mitsubishi Outlander<span class="td-year">10,579 registered</span></td><td><span class="fuel-badge badge-diesel">Diesel</span></td><td class="td-num td-official">6.2</td><td class="td-num td-real">7.3</td><td class="td-diff td-diff-diesel">+18%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 4WD -->
+  <div class="cat-section">
+    <div class="cat-header">
+      <span class="cat-title">4WD / Traditional 4x4</span>
+      <span class="cat-avg">Diesel avg: 8.7 L/100km official &nbsp;·&nbsp; Petrol avg: 12.1 L/100km official</span>
+    </div>
+    <table class="data-table">
+      <thead><tr><th>Model</th><th>Fuel</th><th class="num">Official</th><th class="num">Real-world</th><th class="num">Gap</th></tr></thead>
+      <tbody>
+        <tr class="fuel-header-row"><td colspan="5"><span class="fuel-section-label fsl-diesel">Diesel — top 5 by AU registrations</span></td></tr>
+        <tr><td class="td-model">Toyota LandCruiser<span class="td-year">456,862 registered</span></td><td><span class="fuel-badge badge-diesel">Diesel</span></td><td class="td-num td-official">8.9</td><td class="td-num td-real">10.5</td><td class="td-diff td-diff-diesel">+18%</td></tr>
+        <tr><td class="td-model">Toyota LandCruiser Prado<span class="td-year">282,052 registered</span></td><td><span class="fuel-badge badge-diesel">Diesel</span></td><td class="td-num td-official">8.0</td><td class="td-num td-real">9.4</td><td class="td-diff td-diff-diesel">+18%</td></tr>
+        <tr><td class="td-model">Mitsubishi Pajero<span class="td-year">132,450 registered</span></td><td><span class="fuel-badge badge-diesel">Diesel</span></td><td class="td-num td-official">8.0</td><td class="td-num td-real">9.4</td><td class="td-diff td-diff-diesel">+18%</td></tr>
+        <tr><td class="td-model">Nissan Patrol<span class="td-year">108,535 registered</span></td><td><span class="fuel-badge badge-diesel">Diesel</span></td><td class="td-num td-official">10.9</td><td class="td-num td-real">12.9</td><td class="td-diff td-diff-diesel">+18%</td></tr>
+        <tr><td class="td-model">Isuzu MU-X<span class="td-year">85,801 registered</span></td><td><span class="fuel-badge badge-diesel">Diesel</span></td><td class="td-num td-official">7.9</td><td class="td-num td-real">9.3</td><td class="td-diff td-diff-diesel">+18%</td></tr>
+        <tr class="fuel-header-row"><td colspan="5"><span class="fuel-section-label fsl-petrol">Petrol — top 5 by AU registrations</span></td></tr>
+        <tr><td class="td-model">Toyota LandCruiser Prado<span class="td-year">65,735 registered</span></td><td><span class="fuel-badge badge-petrol">Petrol</span></td><td class="td-num td-official">11.7</td><td class="td-num td-real">14.5</td><td class="td-diff td-diff-petrol">+24%</td></tr>
+        <tr><td class="td-model">Toyota LandCruiser<span class="td-year">59,774 registered</span></td><td><span class="fuel-badge badge-petrol">Petrol</span></td><td class="td-num td-official">13.1</td><td class="td-num td-real">16.1</td><td class="td-diff td-diff-petrol">+24%</td></tr>
+        <tr><td class="td-model">Nissan Patrol<span class="td-year">44,885 registered</span></td><td><span class="fuel-badge badge-petrol">Petrol</span></td><td class="td-num td-official">14.5</td><td class="td-num td-real">17.9</td><td class="td-diff td-diff-petrol">+24%</td></tr>
+        <tr><td class="td-model">Jeep Wrangler<span class="td-year">30,841 registered</span></td><td><span class="fuel-badge badge-petrol">Petrol</span></td><td class="td-num td-official">9.7</td><td class="td-num td-real">12.0</td><td class="td-diff td-diff-petrol">+24%</td></tr>
+        <tr><td class="td-model">Mitsubishi Pajero<span class="td-year">29,315 registered</span></td><td><span class="fuel-badge badge-petrol">Petrol</span></td><td class="td-num td-official">11.3</td><td class="td-num td-real">14.0</td><td class="td-diff td-diff-petrol">+24%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- UTES -->
+  <div class="cat-section">
+    <div class="cat-header">
+      <span class="cat-title">Utes / Pick-ups</span>
+      <span class="cat-avg">Diesel avg: 7.9 L/100km official &nbsp;·&nbsp; 9.3 L/100km est. real-world</span>
+    </div>
+    <table class="data-table">
+      <thead><tr><th>Model</th><th>Fuel</th><th class="num">Official</th><th class="num">Real-world</th><th class="num">Gap</th></tr></thead>
+      <tbody>
+        <tr class="fuel-header-row"><td colspan="5"><span class="fuel-section-label fsl-diesel">Diesel — top 5 by AU registrations</span></td></tr>
+        <tr><td class="td-model">Toyota HiLux<span class="td-year">635,188 registered</span></td><td><span class="fuel-badge badge-diesel">Diesel</span></td><td class="td-num td-official">7.9</td><td class="td-num td-real">9.3</td><td class="td-diff td-diff-diesel">+18%</td></tr>
+        <tr><td class="td-model">Ford Ranger<span class="td-year">Australia's #1 new car sold <br>494,739 registered</span></td><td><span class="fuel-badge badge-diesel">Diesel</span></td><td class="td-num td-official">8.0</td><td class="td-num td-real">9.4</td><td class="td-diff td-diff-diesel">+18%</td></tr>
+        <tr><td class="td-model">Mitsubishi Triton<span class="td-year">308,886 registered</span></td><td><span class="fuel-badge badge-diesel">Diesel</span></td><td class="td-num td-official">8.4</td><td class="td-num td-real">9.9</td><td class="td-diff td-diff-diesel">+18%</td></tr>
+        <tr><td class="td-model">Nissan Navara<span class="td-year">273,891 registered</span></td><td><span class="fuel-badge badge-diesel">Diesel</span></td><td class="td-num td-official">7.1</td><td class="td-num td-real">8.4</td><td class="td-diff td-diff-diesel">+18%</td></tr>
+        <tr><td class="td-model">Isuzu D-Max<span class="td-year">216,518 registered</span></td><td><span class="fuel-badge badge-diesel">Diesel</span></td><td class="td-num td-official">7.9</td><td class="td-num td-real">9.3</td><td class="td-diff td-diff-diesel">+18%</td></tr>
+        <tr class="fuel-header-row"><td colspan="5"><span class="fuel-section-label fsl-petrol">Petrol — minority of Australian ute sales</span></td></tr>
+        <tr><td class="td-model">Toyota HiLux<span class="td-year">248,739 registered</span></td><td><span class="fuel-badge badge-petrol">Petrol</span></td><td class="td-num td-official">10.4</td><td class="td-num td-real">12.9</td><td class="td-diff td-diff-petrol">+24%</td></tr>
+        <tr><td class="td-model">Mitsubishi Triton<span class="td-year">51,826 registered</span></td><td><span class="fuel-badge badge-petrol">Petrol</span></td><td class="td-num td-official">10.9</td><td class="td-num td-real">13.5</td><td class="td-diff td-diff-petrol">+24%</td></tr>
+        <tr><td class="td-model">Ford Ranger<span class="td-year">4,853 registered</span></td><td><span class="fuel-badge badge-petrol">Petrol</span></td><td class="td-num td-official">11.5</td><td class="td-num td-real">14.2</td><td class="td-diff td-diff-petrol">+24%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- VANS -->
+  <div class="cat-section">
+    <div class="cat-header">
+      <span class="cat-title">Vans / People Movers</span>
+      <span class="cat-avg">Diesel avg: 7.8 L/100km official &nbsp;·&nbsp; 9.2 L/100km est. real-world</span>
+    </div>
+    <table class="data-table">
+      <thead><tr><th>Model</th><th>Fuel</th><th class="num">Official</th><th class="num">Real-world</th><th class="num">Gap</th></tr></thead>
+      <tbody>
+        <tr class="fuel-header-row"><td colspan="5"><span class="fuel-section-label fsl-diesel">Diesel — top 5 by AU registrations</span></td></tr>
+        <tr><td class="td-model">Toyota HiAce<span class="td-year">60,254 registered</span></td><td><span class="fuel-badge badge-diesel">Diesel</span></td><td class="td-num td-official">8.2</td><td class="td-num td-real">9.7</td><td class="td-diff td-diff-diesel">+18%</td></tr>
+        <tr><td class="td-model">Hyundai iLoad<span class="td-year">48,460 registered</span></td><td><span class="fuel-badge badge-diesel">Diesel</span></td><td class="td-num td-official">8.8</td><td class="td-num td-real">10.4</td><td class="td-diff td-diff-diesel">+18%</td></tr>
+        <tr><td class="td-model">Mercedes-Benz Sprinter<span class="td-year">48,148 registered</span></td><td><span class="fuel-badge badge-diesel">Diesel</span></td><td class="td-num td-official">8.2</td><td class="td-num td-real">9.7</td><td class="td-diff td-diff-diesel">+18%</td></tr>
+        <tr><td class="td-model">Ford Transit<span class="td-year">45,280 registered</span></td><td><span class="fuel-badge badge-diesel">Diesel</span></td><td class="td-num td-official">7.3</td><td class="td-num td-real">8.6</td><td class="td-diff td-diff-diesel">+18%</td></tr>
+        <tr><td class="td-model">Kia Carnival<span class="td-year">37,781 registered</span></td><td><span class="fuel-badge badge-diesel">Diesel</span></td><td class="td-num td-official">6.5</td><td class="td-num td-real">7.7</td><td class="td-diff td-diff-diesel">+18%</td></tr>
+        <tr class="fuel-header-row"><td colspan="5"><span class="fuel-section-label fsl-petrol">Petrol — people movers</span></td></tr>
+        <tr><td class="td-model">Toyota HiAce<span class="td-year">60,085 registered</span></td><td><span class="fuel-badge badge-petrol">Petrol</span></td><td class="td-num td-official">10.1</td><td class="td-num td-real">12.5</td><td class="td-diff td-diff-petrol">+24%</td></tr>
+        <tr><td class="td-model">Kia Carnival<span class="td-year">39,680 registered</span></td><td><span class="fuel-badge badge-petrol">Petrol</span></td><td class="td-num td-official">10.8</td><td class="td-num td-real">13.4</td><td class="td-diff td-diff-petrol">+24%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- HYBRIDS -->
+  <div class="cat-section">
+    <div class="cat-header">
+      <span class="cat-title">Hybrids (self-charging)</span>
+      <span class="cat-avg">Avg: 4.3 L/100km official &nbsp;·&nbsp; 5.0 L/100km est. real-world</span>
+    </div>
+    <table class="data-table">
+      <thead><tr><th>Model</th><th>Fuel</th><th class="num">Official</th><th class="num">Real-world</th><th class="num">Gap</th></tr></thead>
+      <tbody>
+        <tr class="fuel-header-row"><td colspan="5"><span class="fuel-section-label fsl-hybrid">Petrol hybrid — top 5 by AU registrations</span></td></tr>
+        <tr><td class="td-model">Toyota RAV4 Hybrid<span class="td-year">222,110 registered</span></td><td><span class="fuel-badge badge-hybrid">Hybrid</span></td><td class="td-num td-official">4.8</td><td class="td-num td-real">5.5</td><td class="td-diff td-diff-petrol">+14%</td></tr>
+        <tr><td class="td-model">Toyota Camry Hybrid<span class="td-year">176,336 registered</span></td><td><span class="fuel-badge badge-hybrid">Hybrid</span></td><td class="td-num td-official">4.2</td><td class="td-num td-real">4.8</td><td class="td-diff td-diff-petrol">+14%</td></tr>
+        <tr><td class="td-model">Toyota Corolla Hybrid<span class="td-year">151,790 registered</span></td><td><span class="fuel-badge badge-hybrid">Hybrid</span></td><td class="td-num td-official">4.0</td><td class="td-num td-real">4.6</td><td class="td-diff td-diff-petrol">+14%</td></tr>
+        <tr><td class="td-model">Toyota Prius<span class="td-year">58,942 registered</span></td><td><span class="fuel-badge badge-hybrid">Hybrid</span></td><td class="td-num td-official">2.7</td><td class="td-num td-real">3.1</td><td class="td-diff td-diff-petrol">+14%</td></tr>
+        <tr><td class="td-model">Toyota Kluger Hybrid<span class="td-year">42,294 registered</span></td><td><span class="fuel-badge badge-hybrid">Hybrid</span></td><td class="td-num td-official">5.6</td><td class="td-num td-real">6.4</td><td class="td-diff td-diff-petrol">+14%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ELECTRIC -->
+  <div class="cat-section">
+    <div class="cat-header">
+      <span class="cat-title">Electric Vehicles</span>
+      <span class="cat-avg">Avg: 15.4 kWh/100km official &nbsp;·&nbsp; 17.6 kWh/100km est. real-world</span>
+    </div>
+    <table class="data-table">
+      <thead><tr>
+        <th>Model</th><th>Fuel</th>
+        <th class="num">Official</th><th class="num">Real-world</th><th class="num">Gap</th>
+      </tr></thead>
+      <tbody>
+        <tr class="fuel-header-row"><td colspan="5"><span class="fuel-section-label fsl-electric">Electric — WLTP kWh/100km from manufacturer specs. Real-world estimate applies +14%.</span></td></tr>
+        <tr><td class="td-model">Tesla Model 3<span class="td-year">46,981 registered</span></td><td><span class="fuel-badge badge-electric">Electric</span></td><td class="td-num td-official">14.1 kWh</td><td class="td-num td-real">16.1 kWh</td><td class="td-diff td-diff-petrol">+14%</td></tr>
+        <tr><td class="td-model">Tesla Model Y<span class="td-year">38,085 registered</span></td><td><span class="fuel-badge badge-electric">Electric</span></td><td class="td-num td-official">14.9 kWh</td><td class="td-num td-real">17.0 kWh</td><td class="td-diff td-diff-petrol">+14%</td></tr>
+        <tr><td class="td-model">BYD Atto 3<span class="td-year">13,631 registered</span></td><td><span class="fuel-badge badge-electric">Electric</span></td><td class="td-num td-official">15.4 kWh</td><td class="td-num td-real">17.6 kWh</td><td class="td-diff td-diff-petrol">+14%</td></tr>
+        <tr><td class="td-model">MG ZS EV<span class="td-year">5,334 registered</span></td><td><span class="fuel-badge badge-electric">Electric</span></td><td class="td-num td-official">14.8 kWh</td><td class="td-num td-real">16.9 kWh</td><td class="td-diff td-diff-petrol">+14%</td></tr>
+        <tr><td class="td-model">Nissan Leaf<span class="td-year">4,293 registered</span></td><td><span class="fuel-badge badge-electric">Electric</span></td><td class="td-num td-official">18.0 kWh</td><td class="td-num td-real">20.5 kWh</td><td class="td-diff td-diff-petrol">+14%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<footer>
+  Ride &amp; Save &copy; 2026 &nbsp;&middot;&nbsp; <a href="contact.html">Contact</a><br>
+  <a href="/">← Back to calculator</a>
+</footer>
+
+</body>
+</html>

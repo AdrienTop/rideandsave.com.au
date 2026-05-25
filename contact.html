@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', { 'analytics_storage': 'granted', 'ad_storage': 'denied' });
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX', { 'client_storage': 'none', 'anonymize_ip': true });
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="favicon.ico">
+<title>Contact — Ride &amp; Save</title>
+<meta name="description" content="Send feedback or get in touch with the Ride &amp; Save team.">
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://rideandsave.com.au/contact.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #1a9e5c; --green-light: #22c76e; --green-pale: #e8faf1;
+    --black: #0d1117; --grey-mid: #3a4353; --grey-light: #8896ab;
+    --off-white: #f7f9f7; --white: #ffffff; --red: #e05252;
+    --shadow: 0 4px 24px rgba(0,0,0,0.09); --radius: 16px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--off-white); color: var(--black); min-height: 100vh; }
+
+  header { background: var(--black); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 64px; position: sticky; top: 0; z-index: 100; }
+  .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; color: var(--white); letter-spacing: -0.5px; }
+  .logo span { color: var(--green-light); }
+
+  .hero { background: var(--black); padding: 3rem 2rem 3.5rem; text-align: center; position: relative; overflow: hidden; }
+  .hero::before { content:''; position:absolute; top:-80px; left:50%; transform:translateX(-50%); width:500px; height:500px; background:radial-gradient(circle,rgba(26,158,92,.18) 0%,transparent 70%); pointer-events:none; }
+  .hero-eyebrow { font-family:'Syne',sans-serif; font-size:.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--green-light); margin-bottom:1rem; }
+  .hero h1 { font-family:'Syne',sans-serif; font-size:clamp(1.8rem,4vw,2.8rem); font-weight:700; color:var(--white); line-height:1.15; margin-bottom:.75rem; }
+  .hero p { color: rgba(255,255,255,0.65); font-size: 1rem; max-width: 480px; margin: 0 auto; line-height: 1.6; }
+
+  .main { max-width: 600px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+
+  .card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); padding: 2rem; border: 1px solid rgba(0,0,0,.05); }
+
+  .form-group { margin-bottom: 1.4rem; }
+  label { display: block; font-size: .88rem; font-weight: 500; color: var(--grey-mid); margin-bottom: .45rem; }
+  label .optional { font-weight: 400; color: var(--grey-light); margin-left: .3rem; }
+  input[type="text"], input[type="email"], textarea, select {
+    border: 1.5px solid #e2e8f0; border-radius: 10px; padding: .7rem .9rem;
+    font-size: .95rem; font-family: 'DM Sans', sans-serif; color: var(--black);
+    background: var(--white); outline: none; transition: border-color .2s; width: 100%;
+  }
+  input[type="text"]:focus, input[type="email"]:focus, textarea:focus, select:focus {
+    border-color: var(--green); box-shadow: 0 0 0 3px rgba(26,158,92,.1);
+  }
+  textarea { resize: vertical; min-height: 130px; line-height: 1.55; }
+
+  .submit-btn {
+    width: 100%; background: var(--green); color: var(--white); border: none;
+    border-radius: 12px; padding: 1rem; font-family: 'Syne', sans-serif;
+    font-size: 1rem; font-weight: 700; cursor: pointer; letter-spacing: .3px;
+    transition: background .2s, transform .15s; margin-top: .5rem;
+  }
+  .submit-btn:hover { background: #158a4e; transform: translateY(-1px); }
+  .submit-btn:active { transform: translateY(0); }
+
+  .privacy-note { font-size: .78rem; color: var(--grey-light); text-align: center; margin-top: 1rem; line-height: 1.5; }
+
+  .success-msg { display: none; text-align: center; padding: 2.5rem 1.5rem; }
+  .success-msg .tick { font-size: 2.8rem; margin-bottom: 1rem; }
+  .success-msg h2 { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 700; margin-bottom: .6rem; }
+  .success-msg p { color: var(--grey-mid); font-size: .95rem; line-height: 1.6; }
+  .back-link { display: inline-block; margin-top: 1.5rem; font-size: .9rem; color: var(--green); font-weight: 600; text-decoration: none; }
+  .back-link:hover { text-decoration: underline; }
+
+  footer { text-align: center; padding: 2rem 1.5rem; font-size: 0.85rem; color: var(--grey-light); border-top: 1px solid #e8ecf0; line-height: 1.8; }
+  footer a { color: var(--green); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="/" style="text-decoration:none"><div class="logo">Ride<span>&</span>Save</div></a>
+  <a href="/" style="font-size:.8rem;color:var(--green-light);text-decoration:none;font-weight:600;border:1.5px solid var(--green-light);border-radius:20px;padding:4px 12px;transition:all .15s" onmouseover="this.style.background='rgba(34,199,110,.15)'" onmouseout="this.style.background='transparent'">← Calculator</a>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">Get in touch</div>
+  <h1>We'd love your feedback</h1>
+  <p>Spotted something wrong? Have a suggestion? Just want to say hi? Drop us a message.</p>
+</div>
+
+<div class="main">
+  <div class="card">
+
+    <form id="contactForm" action="https://formspree.io/f/maqlaeql" method="POST">
+
+      <div class="form-group">
+        <label for="topic">What's this about?</label>
+        <select id="topic" name="topic" required>
+          <option value="" disabled selected>Select a topic…</option>
+          <option value="data-error">Data error or incorrect figure</option>
+          <option value="suggestion">Feature suggestion</option>
+          <option value="bug">Something isn't working</option>
+          <option value="feedback">General feedback</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" placeholder="Tell us what's on your mind…" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Your email <span class="optional">(optional — only if you'd like a reply)</span></label>
+        <input type="email" id="email" name="email" placeholder="you@example.com">
+      </div>
+
+      <input type="text" name="_gotcha" style="display:none">
+
+      <button type="submit" class="submit-btn">Send message →</button>
+    </form>
+
+    <div class="success-msg" id="successMsg">
+      <div class="tick">✅</div>
+      <h2>Message received!</h2>
+      <p>Thanks for taking the time to write in. If you left an email address we'll get back to you soon.</p>
+      <a href="/" class="back-link">← Back to the calculator</a>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  Ride &amp; Save &copy; 2026 &nbsp;&middot;&nbsp; <a href="contact.html">Contact</a>
+</footer>
+
+<script>
+  const form = document.getElementById('contactForm');
+  const success = document.getElementById('successMsg');
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = form.querySelector('.submit-btn');
+    btn.textContent = 'Sending…';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        form.style.display = 'none';
+        success.style.display = 'block';
+      } else {
+        btn.textContent = 'Send failed — please try again';
+        btn.disabled = false;
+      }
+    } catch {
+      btn.textContent = 'Send failed — please try again';
+      btn.disabled = false;
+    }
+  });
+</script>
+
+</body>
+</html>
