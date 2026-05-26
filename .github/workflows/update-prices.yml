@@ -1,0 +1,36 @@
+name: Update fuel prices
+
+on:
+  schedule:
+    # Every Tuesday 9am AEST (Monday 23:00 UTC) — after NRMA publishes Monday's report
+    - cron: '0 23 * * 1'
+  workflow_dispatch:  # allows manual trigger from the GitHub Actions tab
+
+permissions:
+  contents: write   # needed to commit and push index.html
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Fetch fuel prices from NRMA
+        run: python update_prices.py
+
+      - name: Commit and push if prices changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: update fuel prices"
+            git push
+          else
+            echo "Prices unchanged, nothing to commit."
+          fi
