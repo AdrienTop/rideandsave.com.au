@@ -273,9 +273,9 @@
           <span class="pfx">$</span>
           <input type="number" id="fuelPrice" min="0.5" step="0.01" value="1.84">
         </div>
-        <!-- UPDATE: update price and date each time NRMA publishes new weekly data -->
+        <!-- UPDATE: updated automatically each Tuesday via GitHub Actions (update_prices.py) -->
         <div class="hint">
-          <span class="live-dot"></span>Pre-filled with current national avg from <a href="https://www.mynrma.com.au/cars-and-driving/fuel-finder/weekly-report" target="_blank">the NRMA weekly fuel report</a> <br>(w/e 25 May 2026 — update weekly).
+          <span class="live-dot"></span>Pre-filled with current national avg from <a href="https://www.globalpetrolprices.com/Australia/gasoline_prices/" target="_blank">GlobalPetrolPrices.com</a> <br>(w/e 25 May 2026 — updated weekly).
         </div>
       </div>
       <div class="field" id="elecPriceField" style="display:none">
@@ -376,7 +376,7 @@
 <div style="max-width:880px;margin:0 auto;padding:0 1.5rem 3rem">
   <div style="border-top:1px solid #e8ecf0;padding-top:2rem;font-size:.88rem;color:var(--grey-mid);line-height:1.8">
     <h2 style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:var(--black);margin-bottom:.75rem">About this calculator</h2>
-    <p>The ATO's 88 cents per kilometre rate — the figure the tax office uses to value the full cost of running a car in Australia — is what we use as your true driving cost. It bundles fuel, maintenance, registration, insurance, and depreciation into one number. With petrol averaging over $1.87 per litre nationally and <a href="https://www.abs.gov.au/Ausstats/Abs@.Nsf/7d12b0f6763c78caca257061001cc588/531cdabf5b2ecff9ca25829400128632!OpenDocument" target="_blank" rel="noopener" style="color:var(--green);text-decoration:none;font-weight:500">Australian commuters averaging 16.5 km each way (33 km per day, ABS)</a>, replacing even two days a week with cycling can add up to thousands of dollars saved per year. Fuel prices are sourced weekly from the <a href="https://www.mynrma.com.au/cars-and-driving/fuel-finder/weekly-report" target="_blank" style="color:var(--green);text-decoration:none;font-weight:500">NRMA weekly fuel report</a>, and vehicle consumption figures are based on real-world data from Australia's BITRE 2024 fleet dataset and EU on-board monitoring studies.</p>
+    <p>The ATO's 88 cents per kilometre rate — the figure the tax office uses to value the full cost of running a car in Australia — is what we use as your true driving cost. It bundles fuel, maintenance, registration, insurance, and depreciation into one number. With petrol averaging over $1.84 per litre nationally and <a href="https://www.abs.gov.au/Ausstats/Abs@.Nsf/7d12b0f6763c78caca257061001cc588/531cdabf5b2ecff9ca25829400128632!OpenDocument" target="_blank" rel="noopener" style="color:var(--green);text-decoration:none;font-weight:500">Australian commuters averaging 16.5 km each way (33 km per day, ABS)</a>, replacing even two days a week with cycling can add up to thousands of dollars saved per year. Fuel prices are sourced weekly from <a href="https://www.globalpetrolprices.com/Australia/" target="_blank" style="color:var(--green);text-decoration:none;font-weight:500">GlobalPetrolPrices.com</a> (national average), and vehicle consumption figures are based on real-world data from Australia's BITRE 2024 fleet dataset and EU on-board monitoring studies.</p>
   </div>
 </div>
 
