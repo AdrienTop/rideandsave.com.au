@@ -2,7 +2,7 @@ name: Update fuel prices
 
 on:
   schedule:
-    # Every Tuesday 9am AEST (Monday 23:00 UTC) — after NRMA publishes Monday's report
+    # Every Tuesday 9am AEST (Monday 23:00 UTC) — globalpetrolprices.com updates weekly
     - cron: '0 23 * * 1'
   workflow_dispatch:  # allows manual trigger from the GitHub Actions tab
 
@@ -20,7 +20,7 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Fetch fuel prices from NRMA
+      - name: Fetch fuel prices from GlobalPetrolPrices
         run: python update_prices.py
 
       - name: Commit and push if prices changed

@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 """
 update_prices.py
-Fetch current fuel prices from the NRMA weekly report and patch index.html.
+Fetch national Australian fuel prices from GlobalPetrolPrices and patch index.html.
 
 Usage:
-  py update_prices.py              # fetch from NRMA + update index.html
+  py update_prices.py              # fetch from globalpetrolprices.com + update index.html
   py update_prices.py --dry-run   # show what would change, don't write
   py update_prices.py --manual 1.87 2.27 "25 May 2026"  # skip fetch, use given values
 
-If the NRMA page is JavaScript-rendered and prices aren't found automatically,
-use --manual with the values you see on the weekly report page.
+Data source: globalpetrolprices.com — national Australian weekly averages.
 """
 
 import re
@@ -18,8 +17,9 @@ import datetime
 import urllib.request
 import urllib.error
 
-REPORT_URL = "https://www.mynrma.com.au/cars-and-driving/fuel-finder/weekly-report"
-INDEX_HTML  = "index.html"
+PETROL_URL = "https://www.globalpetrolprices.com/Australia/gasoline_prices/"
+DIESEL_URL = "https://www.globalpetrolprices.com/Australia/diesel_prices/"
+INDEX_HTML = "index.html"
 
 _HEADERS = {
     "User-Agent": (
@@ -32,55 +32,48 @@ _HEADERS = {
 }
 
 
-def fetch_prices():
-    """Scrape petrol/diesel prices from the NRMA weekly report page.
-
-    Returns (petrol_dollars, diesel_dollars, date_str).
-    Raises ValueError if prices aren't found in the raw HTML (JS-rendered page).
-    """
-    req = urllib.request.Request(REPORT_URL, headers=_HEADERS)
+def _fetch_text(url):
+    req = urllib.request.Request(url, headers=_HEADERS)
     with urllib.request.urlopen(req, timeout=20) as resp:
         raw = resp.read().decode("utf-8", errors="replace")
-
-    # Flatten HTML to plain text for regex search
     text = re.sub(r"<[^>]+>", " ", raw)
-    text = re.sub(r"&amp;", "&", text)
     text = re.sub(r"\s+", " ", text)
+    return text
 
-    # "regular unleaded ... 186.8 cents per litre"
-    petrol_m = re.search(
-        r"(?:regular\s+unleaded|ULP)[^.]{0,150}?(\d{2,3}(?:\.\d)?)\s*cents?\s*per\s*litre",
-        text, re.IGNORECASE,
-    )
-    # "diesel ... 227.2 cents per litre"
-    diesel_m = re.search(
-        r"\bdiesel\b[^.]{0,150}?(\d{2,3}(?:\.\d)?)\s*cents?\s*per\s*litre",
-        text, re.IGNORECASE,
-    )
+
+def fetch_prices():
+    """Scrape national petrol/diesel prices from GlobalPetrolPrices.com.
+
+    Returns (petrol_dollars, diesel_dollars, date_str).
+    Raises ValueError if prices aren't found in the HTML.
+    """
+    petrol_text = _fetch_text(PETROL_URL)
+    diesel_text = _fetch_text(DIESEL_URL)
+
+    # "...Australia is AUD 1.84 per liter or USD..." — anchor on "or USD" to skip historical avg
+    price_re = re.compile(r"AUD ([\d.]+) per liter or USD")
+
+    petrol_m = price_re.search(petrol_text)
+    diesel_m = price_re.search(diesel_text)
 
     if not petrol_m:
         raise ValueError(
-            "Petrol price not found in raw HTML.\n"
-            "The NRMA page may require JavaScript to render prices.\n"
+            "Petrol price not found on GlobalPetrolPrices.\n"
             "Use --manual mode (see usage at top of script)."
         )
     if not diesel_m:
         raise ValueError(
-            "Diesel price not found in raw HTML.\n"
+            "Diesel price not found on GlobalPetrolPrices.\n"
             "Use --manual mode (see usage at top of script)."
         )
 
-    petrol = float(petrol_m.group(1)) / 100
-    diesel = float(diesel_m.group(1)) / 100
+    petrol = float(petrol_m.group(1))
+    diesel = float(diesel_m.group(1))
 
-    # Try to extract the report date, e.g. "Monday, 25 May 2026"
-    date_m = re.search(
-        r"(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)"
-        r"[,\s]+(\d{1,2}\s+\w+\s+\d{4})",
-        text, re.IGNORECASE,
-    )
+    # "...was updated on 25-May-2026..." -> "25 May 2026"
+    date_m = re.search(r"updated on (\d{1,2}-\w+-\d{4})", petrol_text)
     if date_m:
-        date_str = date_m.group(1).strip()
+        date_str = date_m.group(1).replace("-", " ")
     else:
         today = datetime.date.today()
         date_str = f"{today.day} {today.strftime('%B %Y')}"
@@ -175,7 +168,7 @@ def main():
             sys.exit(1)
         print(f"[manual]  Petrol: ${petrol:.2f}/L  Diesel: ${diesel:.2f}/L  Date: {date_str}")
     else:
-        print(f"Fetching {REPORT_URL} ...")
+        print(f"Fetching {PETROL_URL} ...")
         try:
             petrol, diesel, date_str = fetch_prices()
         except ValueError as e:
