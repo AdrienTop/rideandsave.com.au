@@ -198,7 +198,7 @@
   <div class="hero-eyebrow">Bike vs Car Calculator</div>
   <div style="max-width:832px;margin:0 auto"><h1>See how much you save by choosing the <em>bike</em></h1></div>
   <p>Find out how much you could keep in your pocket by swapping your car for a bike.</p>
-  <div class="fuel-alert">⚠️ Petrol averaging $1.77+ per litre nationally — every kilometre adds up</div>
+  <div class="fuel-alert">⚠️ Petrol averaging $1.87+ per litre nationally — every kilometre adds up</div>
 </div>
 
 <div style="max-width:880px;margin:0 auto;padding:1.5rem 1.5rem 0;font-size:.88rem;color:var(--grey-mid);line-height:1.7;padding-bottom:0rem">
@@ -271,11 +271,11 @@
         <label>Fuel price ($/L)</label>
         <div class="input-prefix">
           <span class="pfx">$</span>
-          <input type="number" id="fuelPrice" min="0.5" step="0.01" value="1.77">
+          <input type="number" id="fuelPrice" min="0.5" step="0.01" value="1.87">
         </div>
         <!-- UPDATE: updated automatically each Tuesday via GitHub Actions (update_prices.py) -->
         <div class="hint">
-          <span class="live-dot"></span>Pre-filled with current national avg from <a href="https://www.globalpetrolprices.com/Australia/gasoline_prices/" target="_blank">GlobalPetrolPrices.com</a> <br>(w/e 20 Jul 2026 — updated weekly).
+          <span class="live-dot"></span>Pre-filled with current national avg from <a href="https://www.globalpetrolprices.com/Australia/gasoline_prices/" target="_blank">GlobalPetrolPrices.com</a> <br>(w/e 27 Jul 2026 — updated weekly).
         </div>
       </div>
       <div class="field" id="elecPriceField" style="display:none">
@@ -458,8 +458,8 @@ function updateCustomConsLabel() {
 }
 
 function updateFuelPrice() {
-  if(selFuel==='petrol') document.getElementById('fuelPrice').value='1.77';
-  if(selFuel==='diesel') document.getElementById('fuelPrice').value='2.03';
+  if(selFuel==='petrol') document.getElementById('fuelPrice').value='1.87';
+  if(selFuel==='diesel') document.getElementById('fuelPrice').value='2.16';
 }
 
 function updateVehicleConsDisplay() {
@@ -506,10 +506,10 @@ function calculate() {
 
   let fuelCost=0;
   if(isElec){
-    const ep=parseFloat(document.getElementById('elecPrice').value)||1.77;
+    const ep=parseFloat(document.getElementById('elecPrice').value)||1.87;
     fuelCost=vCons/100*dist*ep;
   } else {
-    const fp=parseFloat(document.getElementById('fuelPrice').value)||1.77;
+    const fp=parseFloat(document.getElementById('fuelPrice').value)||1.87;
     fuelCost=vCons/100*dist*fp;
   }
 
